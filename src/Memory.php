@@ -12,7 +12,7 @@ class Memory {
 
   public function __construct(string $host, int $port, string $namespace, int $timeout)
   {
-    $this->_memcached = new Memcached();
+    $this->_memcached = new \Memcached();
     $this->_memcached->addServer($host, $port);
 
     $this->_namespace = $namespace;
