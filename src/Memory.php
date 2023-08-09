@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace YGGverse\Cache;
 
-class Memcached {
+class Memory {
 
   private $_memcached;
   private $_namespace;
