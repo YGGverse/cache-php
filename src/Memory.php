@@ -19,11 +19,58 @@ class Memory {
     $this->_timeout   = $timeout;
   }
 
-  public function get(string $key, mixed $value = null, int $timeout = null) : mixed
+  public function get(string $key) : mixed
   {
-    if (false === $result = $this->_memcached->get($this->_key($key)))
+    $key = $this->_setKey(
+      [
+        $this->_namespace,
+        $key
+      ]
+    );
+
+    return $this->_memcached->get($key);
+  }
+
+  public function set(string $key, mixed $value = null, int $timeout = null) : bool
+  {
+    $key = $this->_setKey(
+      [
+        $this->_namespace,
+        $key
+      ]
+    );
+
+    return $this->_memcached->set($key, $value, ($timeout ? $timeout : $this->_timeout) + time());
+  }
+
+  public function delete(string $key) : bool
+  {
+    $key = $this->_setKey(
+      [
+        $this->_namespace,
+        $key
+      ]
+    );
+
+    return $this->_memcached->delete($key);
+  }
+
+  public function getByValueCallback(string $key, mixed $value = null, int $timeout = null) : mixed
+  {
+    $key = $this->_setKey(
+      [
+        $this->_namespace,
+        $key
+      ]
+    );
+
+    if (false !== $value = $this->_memcached->get($key))
     {
-      if (true === $this->set($key, $value, $timeout))
+      return $value;
+    }
+    else
+    {
+      if (true === $this->_memcached->set($key, $value, ($timeout ? $timeout : $this->_timeout) + time()))
       {
         return $value;
       }
@@ -32,29 +79,53 @@ class Memory {
         return false;
       }
     }
+  }
+
+  public function getByMethodCallback(object $object, string $method, array $arguments = [], int $timeout = null) : mixed
+  {
+    $key = $this->_setKey(
+      [
+        $this->_namespace,
+        $object,
+        $method,
+        $arguments
+      ]
+    );
+
+    if (false !== $value = $this->_memcached->get($key))
+    {
+      return $value;
+    }
     else
     {
-      return $result;
+      $value = call_user_func_array(
+        [
+          $object,
+          $method
+        ],
+        $arguments
+      );
+
+      if (true === $this->_memcached->set($key, $value, ($timeout ? $timeout : $this->_timeout) + time()))
+      {
+        return $value;
+      }
+      else
+      {
+        return false;
+      }
     }
   }
 
-  public function set(string $key, mixed $value, int $timeout = null)
-  {
-    return $this->_memcached->set($this->_key($key), $value, ($timeout ? $timeout : $this->_timeout) + time());
-  }
-
-  public function delete(string $key) : bool
-  {
-    return $this->_memcached->delete($this->_key($key));
-  }
-
-  public function flush(int $delay = 60)
+  public function flush(int $delay = 60) : bool
   {
     return $this->_memcached->flush();
   }
 
-  private function _key(string $key) : string
+  private function _setKey(mixed $key) : string
   {
-    return sprintf('%s.%s', $this->_namespace, $key);
+    return md5(
+      json_encode($key)
+    );
   }
 }
