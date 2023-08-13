@@ -40,7 +40,7 @@ class Memory {
       ]
     );
 
-    return $this->_memcached->set($key, $value, ($timeout ? $timeout : $this->_timeout) + time());
+    return $this->_memcached->set($key, $value, ($timeout ? $timeout : $this->_timeout));
   }
 
   public function delete(string $key) : bool
@@ -70,7 +70,7 @@ class Memory {
     }
     else
     {
-      if (true === $this->_memcached->set($key, $value, ($timeout ? $timeout : $this->_timeout) + time()))
+      if (true === $this->_memcached->set($key, $value, ($timeout ? $timeout : $this->_timeout)))
       {
         return $value;
       }
@@ -106,7 +106,7 @@ class Memory {
         $arguments
       );
 
-      if (true === $this->_memcached->set($key, $value, ($timeout ? $timeout : $this->_timeout) + time()))
+      if (true === $this->_memcached->set($key, $value, ($timeout ? $timeout : $this->_timeout)))
       {
         return $value;
       }

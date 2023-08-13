@@ -10,11 +10,11 @@ Extends [PHP memcached](https://www.php.net/manual/en/book.memcached.php)
 ```
 $memory = new Yggverse\Cache\Memory(
 
-  'localhost, // memcached server host, localhost by default
-  11211,      // memcached server port, 11211 by default
+  'localhost,   // memcached server host, localhost by default
+  11211,        // memcached server port, 11211 by default
 
-  'my_app',   // application namespace
-  3600        // cache time offset by default
+  'my_app',     // application namespace
+  3600 + time() // cache time by default
 );
 ```
 
@@ -34,9 +34,9 @@ Return cached or cache new value of plain value callback
 
 ```
   $value = $memory->getByValueCallback(
-    'key_name', // string, unique key name
-    'value',    // mixed, plain value
-    3600,       // optional, cache timeout offset for this value
+    'key_name',    // string, unique key name
+    'value',       // mixed, plain value
+    3600 + time(), // optional, cache timeout for this value
   );
 ```
 
@@ -53,6 +53,6 @@ Return cached or cache new value of object method callback
       $method_attribute_2,
       ...
     ]
-    3600,                  // optional, cache timeout offset for this value
+    3600 + time(),         // optional, cache timeout for this value
   );
 ```
