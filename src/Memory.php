@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace YGGverse\Cache;
+namespace Yggverse\Cache;
 
 class Memory {
 
