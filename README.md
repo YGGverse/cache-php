@@ -8,9 +8,9 @@ Extends [PHP memcached](https://www.php.net/manual/en/book.memcached.php)
 #### Init
 
 ```
-$memory = new Yggverse\Cache\Memory(
+$memory = new \Yggverse\Cache\Memory(
 
-  'localhost,   // memcached server host, localhost by default
+  'localhost',  // memcached server host, localhost by default
   11211,        // memcached server port, 11211 by default
 
   'my_app',     // application namespace
