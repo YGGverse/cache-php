@@ -19,7 +19,7 @@ class Memory {
     $this->_timeout   = $timeout;
   }
 
-  public function get(string $key) : mixed
+  public function get(mixed $key) : mixed
   {
     $key = $this->_setKey(
       [
@@ -31,7 +31,7 @@ class Memory {
     return $this->_memcached->get($key);
   }
 
-  public function set(string $key, mixed $value = null, int $timeout = null) : bool
+  public function set(mixed $key, mixed $value = null, int $timeout = null) : bool
   {
     $key = $this->_setKey(
       [
@@ -43,7 +43,7 @@ class Memory {
     return $this->_memcached->set($key, $value, ($timeout ? $timeout : $this->_timeout));
   }
 
-  public function delete(string $key) : bool
+  public function delete(mixed $key) : bool
   {
     $key = $this->_setKey(
       [
@@ -55,7 +55,7 @@ class Memory {
     return $this->_memcached->delete($key);
   }
 
-  public function getByValueCallback(string $key, mixed $value = null, int $timeout = null) : mixed
+  public function getByValueCallback(mixed $key, mixed $value = null, int $timeout = null) : mixed
   {
     $key = $this->_setKey(
       [
