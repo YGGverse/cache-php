@@ -117,9 +117,11 @@ class Memory {
     }
   }
 
-  public function flush(int $delay = 60) : bool
+  public function flush(?int $delay = 0) : bool
   {
-    return $this->_memcached->flush();
+    return $this->_memcached->flush(
+      $delay
+    );
   }
 
   private function _setKey(mixed $key) : string
